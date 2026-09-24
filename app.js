@@ -17,7 +17,7 @@ function showScreen(name, updateHash = true, moveFocus = true) {
   const target = validScreens.includes(name) ? name : "inicio";
   const targetScreen = screens.find((screen) => screen.dataset.screen === target);
   screens.forEach((screen) => screen.classList.toggle("active", screen === targetScreen));
-  document.querySelectorAll(".bottom-nav [data-go]").forEach((button) => {
+  document.querySelectorAll("[data-go]").forEach((button) => {
     const active = button.dataset.go === target;
     button.classList.toggle("active", active);
     if (active) button.setAttribute("aria-current", "page");
@@ -25,10 +25,9 @@ function showScreen(name, updateHash = true, moveFocus = true) {
   });
   if (updateHash && location.hash !== `#${target}`) history.pushState(null, "", `#${target}`);
   window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-  if (moveFocus) {
+  if (moveFocus && targetScreen) {
     const heading = targetScreen.querySelector("h1");
-    heading.tabIndex = -1;
-    heading.focus({ preventScroll: true });
+    if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
   }
 }
 
@@ -54,7 +53,7 @@ function updateBranchUI() {
     rappi.removeAttribute("aria-disabled");
   } else {
     rappi.removeAttribute("href");
-    rappi.textContent = "Enlace pendiente";
+    rappi.textContent = "Rappi pendiente";
     rappi.classList.add("disabled");
     rappi.setAttribute("aria-disabled", "true");
   }
@@ -73,12 +72,13 @@ function renderStream() {
   }
   const iframe = document.createElement("iframe");
   iframe.src = streamUrl;
-  iframe.title = `Transmisión oficial de ${branch}`;
+  iframe.title = `Transmisión en vivo de Kóoben · ${branch}`;
   iframe.loading = "lazy";
-  iframe.allow = "autoplay; fullscreen; picture-in-picture";
+  iframe.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media";
+  iframe.allowFullscreen = true;
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
   frame.append(iframe);
-  sourceLink.href = streamUrl;
+  sourceLink.href = streamUrl.replace("/embed/", "/watch?v=").split("?")[0] + "?v=" + (streamUrl.match(/embed\/([^?]+)/)?.[1] || "PC8nOb8cTNg");
   sourceLink.classList.remove("hidden");
 }
 
@@ -129,17 +129,14 @@ document.querySelector("#logoutButton").addEventListener("click", () => {
   renderMember();
 });
 
-let ticking = false;
-function updateScrollDecorations() {
-  document.documentElement.style.setProperty("--scroll-shift", `${Math.min(window.scrollY * .08, 42)}px`);
-  document.documentElement.style.setProperty("--pizza-rotation", `${-8 + Math.min(window.scrollY * .02, 8)}deg`);
-  ticking = false;
-}
-if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  addEventListener("scroll", () => {
-    if (!ticking) { requestAnimationFrame(updateScrollDecorations); ticking = true; }
-  }, { passive: true });
-}
+document.querySelector("#newsletterForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const name = document.querySelector("#newsletterName").value.trim();
+  if (!name) return;
+  storage.set("koooben.newsletter", { name, email: document.querySelector("#newsletterEmail").value.trim() });
+  document.querySelector("#newsletterMessage").textContent = "Listo: te avisaremos de las próximas novedades.";
+  event.currentTarget.reset();
+});
 
 updateBranchUI();
 renderMember();

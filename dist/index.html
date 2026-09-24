@@ -3,145 +3,85 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f5efe4">
-  <title>Koooben · Beta</title>
+  <meta name="theme-color" content="#fbf8f2">
+  <meta name="description" content="Kóoben: un gusto culposo. Descubre nuestras especialidades y la señal en vivo.">
+  <meta property="og:title" content="Kóoben · Un gusto culposo">
+  <meta property="og:description" content="Amor a primera rebanada: conoce las especialidades de temporada de Kóoben.">
+  <title>Kóoben · Un gusto culposo</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <a class="brand" href="#inicio" aria-label="Koooben, ir a inicio">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span>Koooben<small>beta local</small></span>
+      <a class="brand" href="#inicio" aria-label="Kóoben, ir a inicio">
+        <img class="brand-logo" src="https://koobenpizza.my.canva.site/_assets/media/191b772e2dce9162779902b6f1ac02f1.png" alt="Kóoben">
+        <span class="brand-copy"><strong>Kóoben</strong><small>un gusto culposo</small></span>
       </a>
-      <button class="branch-pill" id="branchButton" type="button" aria-haspopup="dialog">
-        <span>📍</span><span id="branchShort">UPIICSA Sociales</span>
-      </button>
-      <a class="admin-demo-link" href="admin.html">Admin · Demo local</a>
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <button class="active" data-go="inicio" type="button">Inicio</button>
+        <button data-go="menu" type="button">Menú</button>
+        <button data-go="horno" type="button">En vivo</button>
+        <button data-go="consentidos" type="button">Consentidos</button>
+      </nav>
+      <div class="topbar-actions">
+        <button class="branch-pill" id="branchButton" type="button" aria-haspopup="dialog"><span aria-hidden="true">⌖</span><span id="branchShort">UPIICSA Sociales</span></button>
+        <a class="admin-demo-link" href="admin.html">Admin demo</a>
+      </div>
     </header>
 
     <main>
       <section class="screen active" data-screen="inicio" aria-labelledby="homeTitle">
-        <div class="hero">
-          <div class="orbit orbit-one" aria-hidden="true"></div>
-          <div class="orbit orbit-two" aria-hidden="true"></div>
-          <p class="eyebrow">Hecho al momento</p>
-          <h1 id="homeTitle">Tu antojo<br><em>sale del horno.</em></h1>
-          <p>Explora la experiencia de Koooben desde tu sucursal elegida.</p>
-          <button class="button button-dark" data-go="menu" type="button">Ver menú <span>→</span></button>
+        <div class="hero-split">
+          <div class="hero-copy">
+            <p class="eyebrow">Kóoben · temporada 2026</p>
+            <h1 id="homeTitle">Amor a primera <em>rebanada.</em></h1>
+            <p class="hero-lede">Nuevas especialidades para compartir, descubrir y volver por otra. Elige tu sucursal para comenzar.</p>
+            <div class="hero-actions"><button class="button button-dark" data-go="menu" type="button">Conoce el menú <span>↗</span></button><button class="text-link" data-go="horno" type="button">Ver señal en vivo <span>↗</span></button></div>
+            <div class="hero-meta" aria-label="Información de temporada"><span><i></i> Especialidades de febrero</span><span>UPIICSA · CDMX</span></div>
+          </div>
+          <div class="hero-visual"><span class="hero-sticker">Especialidades<br>de febrero</span><div class="hero-circle" aria-hidden="true"></div><img src="https://koobenpizza.my.canva.site/_assets/media/b50650ba9392f00afc5e0bb7ecba0ad6.png" alt="Pizza en forma de corazón con pepperoni de Kóoben" loading="eager"><span class="hero-caption">hecho para compartir</span></div>
         </div>
 
-        <article class="feature-card oven-feature">
-          <div>
-            <p class="eyebrow light">Horno en vivo</p>
-            <h2>Mira lo que<br>está pasando</h2>
-            <p>La transmisión aparecerá aquí cuando la sucursal configure una fuente compatible.</p>
-            <button class="text-link light" data-go="horno" type="button">Abrir horno <span>↗</span></button>
-          </div>
-          <div class="abstract-pizza" role="img" aria-label="Ilustración temporal abstracta, no representa un producto real">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <small class="temporary-tag">Visual temporal</small>
-        </article>
-
+        <div class="home-grid">
+          <article class="live-card"><div class="card-kicker">Señal en vivo <span class="live-dot"></span></div><h2>Quédate cerca<br>de Kóoben.</h2><p>Conecta con la transmisión que compartiste y no te pierdas lo que está pasando.</p><button class="text-link light" data-go="horno" type="button">Abrir transmisión <span>↗</span></button><div class="live-card-orbit" aria-hidden="true"></div></article>
+          <article class="season-card"><div><div class="card-kicker">Nuevas especialidades</div><h2>Una rebanada<br>con historia.</h2><p>Descubre Napolitana y Peppelove en el menú de temporada.</p><button class="text-link" data-go="menu" type="button">Ver especialidades <span>↗</span></button></div><img src="https://koobenpizza.my.canva.site/_assets/media/9a39731e9c297db74167dc2361dc7925.png" alt="Rebanada de pizza con albóndigas" loading="lazy"></article>
+        </div>
         <div class="marquee" aria-hidden="true"><div>CALIENTE · LOCAL · RECIÉN HECHO · CALIENTE · LOCAL · RECIÉN HECHO · </div></div>
-
-        <article class="loyalty-card">
-          <span class="stamp">K</span>
-          <div><p class="eyebrow">Consentidos</p><h2>Cada visita cuenta.</h2><p>Consulta el demo local de beneficios y puntos.</p></div>
-          <button class="circle-button" data-go="consentidos" type="button" aria-label="Ir a Consentidos">→</button>
-        </article>
+        <article class="loyalty-card"><div class="loyalty-mark">K</div><div><p class="eyebrow">Consentidos · demo local</p><h2>Cada visita cuenta.</h2><p>Guarda tu perfil en este dispositivo y descubre la experiencia de beneficios.</p></div><button class="circle-button" data-go="consentidos" type="button" aria-label="Ir a Consentidos">↗</button></article>
       </section>
 
       <section class="screen" data-screen="menu" aria-labelledby="menuTitle">
-        <div class="page-heading">
-          <p class="eyebrow">Carta de la sucursal</p>
-          <h1 id="menuTitle">Menú</h1>
-          <p id="menuBranchCopy">UPIICSA Sociales</p>
+        <div class="page-heading menu-heading"><div><p class="eyebrow">Carta de la sucursal</p><h1 id="menuTitle">Menú</h1><p id="menuBranchCopy">UPIICSA Sociales</p></div><div class="menu-note"><span class="status-dot"></span><span>Temporada 2026<br><small>Disponibilidad según sucursal</small></span></div></div>
+        <div class="menu-tabs" aria-label="Categorías del menú"><span class="active">Especialidades</span><span>Paquetes</span><span>Promociones</span></div>
+        <div class="product-grid">
+          <article class="product-card product-card-featured"><div class="product-image"><img src="https://koobenpizza.my.canva.site/_assets/media/9a39731e9c297db74167dc2361dc7925.png" alt="Pizza Napolitana con albóndigas" loading="lazy"><span>01</span></div><div class="product-copy"><div><p class="eyebrow">Nueva especialidad</p><h2>Pizza Napolitana</h2></div><p>Una rebanada protagonista para la temporada.</p></div></article>
+          <article class="product-card"><div class="product-image"><img src="https://koobenpizza.my.canva.site/_assets/media/ece4b8eaf6c21abc85918c2bbf29d641.png" alt="Pizza Peppelove con pepperoni en forma de corazón" loading="lazy"><span>02</span></div><div class="product-copy"><div><p class="eyebrow">Favorita de temporada</p><h2>Peppelove</h2></div><p>El clásico pepperoni con un giro muy Kóoben.</p></div></article>
         </div>
-        <div class="status-card pending">
-          <span class="status-dot"></span>
-          <div><strong>Inventario pendiente de verificación</strong><p>Publicaremos productos, precios y disponibilidad cuando recibamos y validemos el inventario de esta sucursal.</p></div>
+        <div class="catalog-layout">
+          <article class="catalog-card"><div class="card-kicker">La carta</div><h2>Favoritas de Kóoben</h2><div class="menu-list"><span>Pastor</span><span>Bolognesa</span><span>Mexicana</span><span>Texana</span><span>Boneless BBQ</span><span>Boneless Mango Habanero</span><span>Boneless Lemon Pepper</span><span>Arrachera</span><span>Pepperoni</span><span>Hawaiana</span><span>Hawaiana Tropical</span><span>Tres Quesos</span><span>Papas al Horno</span><span>Carnes Frías</span></div></article>
+          <article class="promo-card"><div class="card-kicker">Paquetes & promociones</div><h2>Para compartir<br>el antojo.</h2><div class="promo-row"><span>Pizza de corazón</span><strong>$250</strong></div><div class="promo-row"><span>Dos pizzas de corazón</span><strong>$450</strong></div><p>También encontrarás hot dog, hojaldrados con papas y rebanada de pepperoni.</p></article>
         </div>
-        <div class="menu-preview" aria-label="Vista temporal del futuro menú">
-          <div class="menu-preview-art"><span></span><span></span><span></span></div>
-          <div><small>VISUAL TEMPORAL</small><h2>Aquí aparecerá el menú verificado</h2><p>Esta composición no representa pizzas, ingredientes, precios ni existencias reales.</p></div>
-        </div>
-        <section class="order-card" aria-labelledby="orderTitle">
-          <div><p class="eyebrow">Entrega</p><h2 id="orderTitle">Pide por Rappi</h2><p>El enlace se habilitará cuando la sucursal proporcione su URL oficial.</p></div>
-          <a class="button disabled" id="rappiLink" aria-disabled="true">Enlace pendiente</a>
-        </section>
+        <section class="order-card" aria-labelledby="orderTitle"><div><p class="eyebrow">Pide en tu sucursal</p><h2 id="orderTitle">Llévatela a donde estés.</h2><p>El enlace oficial de Rappi se habilitará cuando esté configurado para esta sucursal.</p></div><a class="button disabled" id="rappiLink" aria-disabled="true">Rappi pendiente</a></section>
       </section>
 
       <section class="screen" data-screen="horno" aria-labelledby="ovenTitle">
-        <div class="page-heading">
-          <p class="eyebrow">Desde la sucursal</p>
-          <h1 id="ovenTitle">Horno en vivo</h1>
-          <p id="ovenBranchCopy">UPIICSA Sociales</p>
-        </div>
-        <div class="stream-frame" id="streamFrame">
-          <div class="stream-empty" id="streamEmpty">
-            <span class="stream-icon">◉</span>
-            <strong>Sin transmisión configurada</strong>
-            <p>Cuando exista una URL oficial compatible, la vista en vivo aparecerá aquí.</p>
-          </div>
-        </div>
-        <a class="button button-dark hidden" id="streamSourceLink" target="_blank" rel="noopener noreferrer">Abrir fuente original ↗</a>
-        <p class="fine-print">Estado beta. Esta pantalla no simula video ni actividad en tiempo real.</p>
+        <div class="page-heading live-heading"><div><p class="eyebrow">Señal compartida por Kóoben</p><h1 id="ovenTitle">En vivo</h1><p id="ovenBranchCopy">UPIICSA Sociales</p></div><span class="live-badge"><i></i> LIVE</span></div>
+        <div class="stream-frame" id="streamFrame"><div class="stream-empty" id="streamEmpty"><span class="stream-icon">◉</span><strong>Preparando la transmisión</strong><p>La señal aparecerá aquí cuando la sucursal esté lista.</p></div></div>
+        <div class="stream-footer"><a class="button button-dark hidden" id="streamSourceLink" target="_blank" rel="noopener noreferrer">Abrir en YouTube ↗</a><p class="fine-print">Señal externa de YouTube · puede requerir activar el sonido.</p></div>
       </section>
 
       <section class="screen" data-screen="consentidos" aria-labelledby="loyaltyTitle">
-        <div class="page-heading">
-          <p class="eyebrow">Programa local demo</p>
-          <h1 id="loyaltyTitle">Consentidos</h1>
-          <p>Perfil y sesión guardados solo en este dispositivo.</p>
-        </div>
-        <div id="loggedOutPanel" class="auth-card">
-          <span class="stamp large">K</span>
-          <h2>Entra al demo</h2>
-          <p>No se crea una cuenta real ni se envían datos.</p>
-          <form id="loginForm">
-            <label>Tu nombre<input id="loginName" name="name" autocomplete="name" required maxlength="40" placeholder="Ej. Abril"></label>
-            <button class="button button-dark" type="submit">Iniciar sesión local</button>
-          </form>
-        </div>
-        <div id="loggedInPanel" class="hidden">
-          <article class="member-card">
-            <div class="member-top"><span>CONSENTIDO · DEMO</span><span>LOCAL</span></div>
-            <p>Hola, <strong id="memberName">—</strong></p>
-            <div class="points"><strong id="pointsValue">120</strong><span>puntos demo</span></div>
-            <div class="fake-qr" aria-label="Marcador visual. Código QR no activo"><span>QR</span></div>
-            <small>QR NO ACTIVO · SOLO DEMOSTRACIÓN</small>
-          </article>
-          <form id="profileForm" class="profile-form">
-            <h2>Tu perfil local</h2>
-            <label>Nombre<input id="profileName" required maxlength="40"></label>
-            <label>Correo opcional<input id="profileEmail" type="email" autocomplete="email" maxlength="80" placeholder="nombre@ejemplo.com"></label>
-            <button class="button button-dark" type="submit">Guardar perfil</button>
-            <p class="save-message" id="saveMessage" role="status"></p>
-          </form>
-          <button class="text-link danger" id="logoutButton" type="button">Cerrar sesión local</button>
-        </div>
+        <div class="page-heading"><p class="eyebrow">Programa local demo</p><h1 id="loyaltyTitle">Consentidos</h1><p>Perfil y sesión guardados solo en este dispositivo.</p></div>
+        <div id="loggedOutPanel" class="auth-card"><div class="loyalty-mark large">K</div><p class="eyebrow">Tu mesa, tu historia</p><h2>Entra al demo</h2><p>No se crea una cuenta real ni se envían datos.</p><form id="loginForm"><label>Tu nombre<input id="loginName" name="name" autocomplete="name" required maxlength="40" placeholder="Ej. Abril"></label><button class="button button-dark" type="submit">Iniciar sesión local</button></form></div>
+        <div id="loggedInPanel" class="hidden"><article class="member-card"><div class="member-top"><span>CONSENTIDO · DEMO</span><span>LOCAL</span></div><p>Hola, <strong id="memberName">—</strong></p><div class="points"><strong id="pointsValue">120</strong><span>puntos demo</span></div><div class="fake-qr" aria-label="Marcador visual. Código QR no activo"><span>QR</span></div><small>QR NO ACTIVO · SOLO DEMOSTRACIÓN</small></article><form id="profileForm" class="profile-form"><h2>Tu perfil local</h2><label>Nombre<input id="profileName" required maxlength="40"></label><label>Correo opcional<input id="profileEmail" type="email" autocomplete="email" maxlength="80" placeholder="nombre@ejemplo.com"></label><button class="button button-dark" type="submit">Guardar perfil</button><p class="save-message" id="saveMessage" role="status"></p></form><button class="text-link danger" id="logoutButton" type="button">Cerrar sesión local</button></div>
       </section>
     </main>
 
-    <nav class="bottom-nav" aria-label="Navegación principal">
-      <button class="active" data-go="inicio" type="button"><span>⌂</span>Inicio</button>
-      <button data-go="menu" type="button"><span>▤</span>Menú</button>
-      <button data-go="horno" type="button"><span>◉</span>Horno</button>
-      <button data-go="consentidos" type="button"><span>♡</span>Consentidos</button>
-    </nav>
+    <footer class="site-footer"><div class="newsletter-copy"><p class="eyebrow">Kóoben en tu bandeja</p><h2>Regístrate y sé el primero en conocer nuestras promociones y lanzamientos.</h2></div><form id="newsletterForm" class="newsletter-form"><label><span>Tu nombre</span><input id="newsletterName" name="name" required maxlength="40" placeholder="Tu nombre"></label><label><span>Email</span><input id="newsletterEmail" name="email" type="email" required maxlength="80" placeholder="nombre@ejemplo.com"></label><button class="button button-accent" type="submit">Quiero enterarme ↗</button><p id="newsletterMessage" role="status"></p></form><div class="footer-bottom"><span>© Kóoben · un gusto culposo</span><span>Hecho con corazón en CDMX</span><span>Términos · Privacidad</span></div></footer>
+    <nav class="bottom-nav" aria-label="Navegación móvil"><button class="active" data-go="inicio" type="button"><span>⌂</span>Inicio</button><button data-go="menu" type="button"><span>▤</span>Menú</button><button data-go="horno" type="button"><span>◉</span>En vivo</button><button data-go="consentidos" type="button"><span>♡</span>Consentidos</button></nav>
   </div>
 
-  <dialog id="branchDialog">
-    <form method="dialog" class="dialog-card">
-      <div class="dialog-heading"><div><p class="eyebrow">Preferencia local</p><h2>Elige tu sucursal</h2></div><button value="cancel" aria-label="Cerrar">×</button></div>
-      <label class="branch-option"><input type="radio" name="branch" value="UPIICSA Sociales"><span><strong>UPIICSA Sociales</strong><small>Seleccionar sucursal</small></span></label>
-      <label class="branch-option"><input type="radio" name="branch" value="UPIICSA Graduados"><span><strong>UPIICSA Graduados</strong><small>Seleccionar sucursal</small></span></label>
-      <button class="button button-dark" id="saveBranch" value="default">Guardar sucursal</button>
-    </form>
-  </dialog>
-
+  <dialog id="branchDialog"><form method="dialog" class="dialog-card"><div class="dialog-heading"><div><p class="eyebrow">Preferencia local</p><h2>Elige tu sucursal</h2></div><button value="cancel" aria-label="Cerrar">×</button></div><label class="branch-option"><input type="radio" name="branch" value="UPIICSA Sociales"><span><strong>UPIICSA Sociales</strong><small>Seleccionar sucursal</small></span></label><label class="branch-option"><input type="radio" name="branch" value="UPIICSA Graduados"><span><strong>UPIICSA Graduados</strong><small>Seleccionar sucursal</small></span></label><button class="button button-dark" id="saveBranch" value="default">Guardar sucursal</button></form></dialog>
   <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
