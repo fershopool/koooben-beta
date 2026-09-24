@@ -1,0 +1,6 @@
+{
+  "name": "kooben-wallet-api",
+  "private": true,
+  "type": "module",
+  "scripts": { "wallet": "node wallet-server.mjs" }
+}

@@ -7,7 +7,7 @@ const storage = {
   }
 };
 
-const validScreens = ["inicio", "menu", "horno", "consentidos"];
+const validScreens = ["inicio", "menu", "paquetes", "promociones", "lanzamientos", "horno", "consentidos"];
 const screens = [...document.querySelectorAll("[data-screen]")];
 const navButtons = [...document.querySelectorAll("[data-go]")];
 const branchDialog = document.querySelector("#branchDialog");
@@ -39,25 +39,38 @@ function updateBranchUI() {
   document.querySelector("#branchShort").textContent = branch;
   document.querySelector("#menuBranchCopy").textContent = branch;
   document.querySelector("#ovenBranchCopy").textContent = branch;
+  document.querySelector("#availableBranch").textContent = branch;
   const option = document.querySelector(`input[name="branch"][value="${CSS.escape(branch)}"]`);
   if (option) option.checked = true;
 
-  const rappi = document.querySelector("#rappiLink");
   const rappiUrl = branchConfig().rappiUrl;
-  if (rappiUrl) {
-    rappi.href = rappiUrl;
-    rappi.target = "_blank";
-    rappi.rel = "noopener noreferrer";
-    rappi.textContent = "Abrir Rappi ↗";
-    rappi.classList.remove("disabled");
-    rappi.removeAttribute("aria-disabled");
-  } else {
-    rappi.removeAttribute("href");
-    rappi.textContent = "Rappi pendiente";
-    rappi.classList.add("disabled");
-    rappi.setAttribute("aria-disabled", "true");
-  }
+  document.querySelectorAll("[data-rappi-link]").forEach((link) => {
+    if (rappiUrl) { link.href = rappiUrl; link.classList.remove("disabled"); link.removeAttribute("aria-disabled"); }
+    else { link.removeAttribute("href"); link.classList.add("disabled"); link.setAttribute("aria-disabled", "true"); }
+  });
+  const rappi = document.querySelector("#rappiLink");
+  if (rappiUrl) rappi.textContent = "Pedir en Rappi ↗";
+  renderAvailableNow();
   renderStream();
+}
+
+function renderAvailableNow() {
+  const list = document.querySelector("#availableList");
+  if (!list) return;
+  list.innerHTML = (branchConfig().availableNow || []).map((item) => `<span class="available-pill"><i></i>${item}</span>`).join("");
+}
+
+function setMenuCategory(category) {
+  document.querySelectorAll("[data-menu-category]").forEach((button) => {
+    const active = button.dataset.menuCategory === category;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+  document.querySelectorAll("[data-menu-panel]").forEach((panel) => {
+    const active = panel.dataset.menuPanel === category;
+    panel.classList.toggle("active", active);
+    panel.hidden = !active;
+  });
 }
 
 function renderStream() {
@@ -83,6 +96,10 @@ function renderStream() {
 }
 
 navButtons.forEach((button) => button.addEventListener("click", () => showScreen(button.dataset.go)));
+document.querySelectorAll("[data-menu-category]").forEach((button) => button.addEventListener("click", () => {
+  setMenuCategory(button.dataset.menuCategory);
+  showScreen("menu");
+}));
 document.querySelector("#branchButton").addEventListener("click", () => branchDialog.showModal());
 document.querySelector("#saveBranch").addEventListener("click", () => {
   const selected = document.querySelector('input[name="branch"]:checked');
@@ -95,21 +112,61 @@ document.querySelector("#saveBranch").addEventListener("click", () => {
 const loggedOut = document.querySelector("#loggedOutPanel");
 const loggedIn = document.querySelector("#loggedInPanel");
 
+function ensureMemberId(profile) {
+  if (profile.memberId) return profile.memberId;
+  const memberId = `member-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  profile.memberId = memberId;
+  storage.set("koooben.profile", profile);
+  return memberId;
+}
+
 function renderMember() {
   const profile = storage.get("koooben.profile", null);
   loggedOut.classList.toggle("hidden", Boolean(profile));
   loggedIn.classList.toggle("hidden", !profile);
   if (!profile) return;
+  ensureMemberId(profile);
   document.querySelector("#memberName").textContent = profile.name;
   document.querySelector("#profileName").value = profile.name;
   document.querySelector("#profileEmail").value = profile.email || "";
+}
+
+async function downloadWalletPass() {
+  const profile = storage.get("koooben.profile", null);
+  const walletMessage = document.querySelector("#walletMessage");
+  const walletButton = document.querySelector("#walletButton");
+  const apiUrl = window.KOOOBEN_CONFIG?.walletApiUrl?.replace(/\/$/, "");
+  if (!profile || !apiUrl) {
+    walletMessage.textContent = "Configura el servidor de Wallet para activar este botón.";
+    return;
+  }
+  walletButton.disabled = true;
+  walletMessage.textContent = "Preparando tu pase…";
+  try {
+    const query = new URLSearchParams({ name: profile.name, email: profile.email || "", memberId: ensureMemberId(profile) });
+    const response = await fetch(`${apiUrl}/api/wallet/pass?${query}`);
+    if (!response.ok) throw new Error("No se pudo generar el pase");
+    const blob = await response.blob();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "kooben-consentidos.pkpass";
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    walletMessage.textContent = "Pase listo. Ábrelo desde tu iPhone para agregarlo a Wallet.";
+  } catch (error) {
+    walletMessage.textContent = error.message || "No se pudo crear el pase.";
+  } finally {
+    walletButton.disabled = false;
+  }
 }
 
 document.querySelector("#loginForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const name = document.querySelector("#loginName").value.trim();
   if (!name) return;
-  storage.set("koooben.profile", { name, email: "" });
+  storage.set("koooben.profile", { name, email: "", memberId: `member-${Date.now()}-${Math.random().toString(36).slice(2, 10)}` });
   renderMember();
 });
 
@@ -118,7 +175,8 @@ document.querySelector("#profileForm").addEventListener("submit", (event) => {
   const name = document.querySelector("#profileName").value.trim();
   const email = document.querySelector("#profileEmail").value.trim();
   if (!name) return;
-  storage.set("koooben.profile", { name, email });
+  const profile = storage.get("koooben.profile", {});
+  storage.set("koooben.profile", { ...profile, name, email });
   document.querySelector("#saveMessage").textContent = "Guardado en este dispositivo.";
   renderMember();
 });
@@ -128,6 +186,8 @@ document.querySelector("#logoutButton").addEventListener("click", () => {
   document.querySelector("#loginForm").reset();
   renderMember();
 });
+
+document.querySelector("#walletButton").addEventListener("click", downloadWalletPass);
 
 document.querySelector("#newsletterForm").addEventListener("submit", (event) => {
   event.preventDefault();
@@ -139,6 +199,7 @@ document.querySelector("#newsletterForm").addEventListener("submit", (event) => 
 });
 
 updateBranchUI();
+setMenuCategory("especialidades");
 renderMember();
 if (!validScreens.includes(location.hash.slice(1))) history.replaceState(null, "", "#inicio");
 showScreen(location.hash.slice(1), false, false);
