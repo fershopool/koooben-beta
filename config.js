@@ -1,6 +1,9 @@
 // URLs configurables por sucursal. El video solicitado se muestra como señal externa.
 window.KOOOBEN_CONFIG = {
-  // Endpoint público de tu API. La clave privada nunca va aquí.
+  // Endpoints públicos de tus APIs. Las claves privadas nunca van aquí.
+  appleWalletApiUrl: "",
+  googleWalletApiUrl: "",
+  // Compatibilidad con la configuración anterior de Apple Wallet.
   walletApiUrl: "",
   branches: {
     "UPIICSA Sociales": {

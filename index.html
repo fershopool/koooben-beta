@@ -9,6 +9,7 @@
   <meta property="og:description" content="Amor a primera rebanada: conoce las especialidades de temporada de Kóoben.">
   <title>Kóoben · Un gusto culposo</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="overrides.css">
 </head>
 <body>
   <div class="app-shell">
@@ -78,15 +79,15 @@
 
       <section class="screen" data-screen="horno" aria-labelledby="ovenTitle">
         <div class="page-heading live-heading"><div><p class="eyebrow">Señal compartida por Kóoben</p><h1 id="ovenTitle">En vivo</h1><p id="ovenBranchCopy">UPIICSA Sociales</p></div><span class="live-badge"><i></i> LIVE</span></div>
-        <div class="stream-frame" id="streamFrame"><div class="stream-empty" id="streamEmpty"><span class="stream-icon">◉</span><strong>Preparando la transmisión</strong><p>La señal aparecerá aquí cuando la sucursal esté lista.</p></div></div>
         <section class="available-now" aria-labelledby="availableTitle"><div><p class="eyebrow">Inventario demo</p><h2 id="availableTitle">Disponibles ahorita</h2><p id="availableBranch">UPIICSA Sociales</p></div><div class="available-list" id="availableList"></div></section>
+        <div class="stream-frame" id="streamFrame"><div class="stream-empty" id="streamEmpty"><span class="stream-icon">◉</span><strong>Preparando la transmisión</strong><p>La señal aparecerá aquí cuando la sucursal esté lista.</p></div></div>
         <div class="stream-footer"><a class="button button-dark hidden" id="streamSourceLink" target="_blank" rel="noopener noreferrer">Abrir en YouTube ↗</a><p class="fine-print">Señal externa de YouTube · puede requerir activar el sonido.</p></div>
       </section>
 
       <section class="screen" data-screen="consentidos" aria-labelledby="loyaltyTitle">
         <div class="page-heading"><p class="eyebrow">Programa de beneficios</p><h1 id="loyaltyTitle">Consentidos</h1><p>Perfil local demo y pase digital de membresía.</p></div>
         <div id="loggedOutPanel" class="auth-card"><div class="loyalty-mark large">K</div><p class="eyebrow">Tu mesa, tu historia</p><h2>Entra al demo</h2><p>No se crea una cuenta real ni se envían datos.</p><form id="loginForm"><label>Tu nombre<input id="loginName" name="name" autocomplete="name" required maxlength="40" placeholder="Ej. Abril"></label><button class="button button-dark" type="submit">Iniciar sesión local</button></form></div>
-        <div id="loggedInPanel" class="hidden"><article class="member-card"><div class="member-top"><span>CONSENTIDO · DEMO</span><span>LOCAL</span></div><p>Hola, <strong id="memberName">—</strong></p><div class="points"><strong id="pointsValue">120</strong><span>puntos demo</span></div><div class="fake-qr" aria-label="Marcador visual. Código QR no activo"><span>QR</span></div><small>QR NO ACTIVO · SOLO DEMOSTRACIÓN</small></article><form id="profileForm" class="profile-form"><h2>Tu perfil local</h2><label>Nombre<input id="profileName" required maxlength="40"></label><label>Correo opcional<input id="profileEmail" type="email" autocomplete="email" maxlength="80" placeholder="nombre@ejemplo.com"></label><button class="button button-dark" type="submit">Guardar perfil</button><p class="save-message" id="saveMessage" role="status"></p></form><div class="wallet-card"><p class="eyebrow">Pase digital</p><h2>Lleva tus beneficios contigo</h2><p>Agrega tu pase de Consentidos a Apple Wallet cuando el servidor esté configurado.</p><button class="button button-accent" id="walletButton" type="button">Agregar a Apple Wallet</button><p class="save-message" id="walletMessage" role="status"></p></div><button class="text-link danger" id="logoutButton" type="button">Cerrar sesión local</button></div>
+        <div id="loggedInPanel" class="hidden"><article class="member-card"><div class="member-top"><span>CONSENTIDO · DEMO</span><span>LOCAL</span></div><p>Hola, <strong id="memberName">—</strong></p><div class="points"><strong id="pointsValue">120</strong><span>puntos demo</span></div><div class="fake-qr" aria-label="Marcador visual. Código QR no activo"><span>QR</span></div><small>QR NO ACTIVO · SOLO DEMOSTRACIÓN</small></article><form id="profileForm" class="profile-form"><h2>Tu perfil local</h2><label>Nombre<input id="profileName" required maxlength="40"></label><label>Correo opcional<input id="profileEmail" type="email" autocomplete="email" maxlength="80" placeholder="nombre@ejemplo.com"></label><button class="button button-dark" type="submit">Guardar perfil</button><p class="save-message" id="saveMessage" role="status"></p></form><div class="wallet-card"><p class="eyebrow">Pase digital</p><h2>Lleva tus beneficios contigo</h2><p>Agrega tu pase de Consentidos a Google Wallet o Apple Wallet.</p><div class="wallet-actions"><button class="button button-accent" id="googleWalletButton" type="button">Agregar a Google Wallet</button><button class="button button-dark" id="appleWalletButton" type="button">Agregar a Apple Wallet</button></div><p class="save-message" id="walletMessage" role="status"></p></div><button class="text-link danger" id="logoutButton" type="button">Cerrar sesión local</button></div>
       </section>
     </main>
 

@@ -129,23 +129,46 @@ function renderMember() {
   document.querySelector("#memberName").textContent = profile.name;
   document.querySelector("#profileName").value = profile.name;
   document.querySelector("#profileEmail").value = profile.email || "";
+  updateWalletState();
 }
 
-async function downloadWalletPass() {
+function walletEndpoint(name) {
+  return (window.KOOOBEN_CONFIG?.[name] || "").replace(/\/$/, "");
+}
+
+function walletProfile() {
   const profile = storage.get("koooben.profile", null);
+  return profile ? { ...profile, memberId: ensureMemberId(profile) } : null;
+}
+
+function updateWalletState() {
+  const profile = walletProfile();
+  const googleButton = document.querySelector("#googleWalletButton");
+  const appleButton = document.querySelector("#appleWalletButton");
   const walletMessage = document.querySelector("#walletMessage");
-  const walletButton = document.querySelector("#walletButton");
-  const apiUrl = window.KOOOBEN_CONFIG?.walletApiUrl?.replace(/\/$/, "");
+  if (!googleButton || !appleButton || !walletMessage || !profile) return;
+  const googleReady = Boolean(walletEndpoint("googleWalletApiUrl"));
+  const appleReady = Boolean(walletEndpoint("appleWalletApiUrl") || walletEndpoint("walletApiUrl"));
+  googleButton.disabled = false;
+  appleButton.disabled = false;
+  walletMessage.textContent = googleReady || appleReady ? "Selecciona una wallet para guardar tu pase." : "Los enlaces de Google Wallet y Apple Wallet están pendientes de configuración.";
+}
+
+async function downloadAppleWalletPass() {
+  const profile = walletProfile();
+  const walletMessage = document.querySelector("#walletMessage");
+  const walletButton = document.querySelector("#appleWalletButton");
+  const apiUrl = walletEndpoint("appleWalletApiUrl") || walletEndpoint("walletApiUrl");
   if (!profile || !apiUrl) {
-    walletMessage.textContent = "Configura el servidor de Wallet para activar este botón.";
+    walletMessage.textContent = "El enlace de Apple Wallet aún no está configurado.";
     return;
   }
   walletButton.disabled = true;
-  walletMessage.textContent = "Preparando tu pase…";
+  walletMessage.textContent = "Preparando tu pase de Apple Wallet…";
   try {
-    const query = new URLSearchParams({ name: profile.name, email: profile.email || "", memberId: ensureMemberId(profile) });
+    const query = new URLSearchParams({ name: profile.name, email: profile.email || "", memberId: profile.memberId });
     const response = await fetch(`${apiUrl}/api/wallet/pass?${query}`);
-    if (!response.ok) throw new Error("No se pudo generar el pase");
+    if (!response.ok) throw new Error("No se pudo generar el pase de Apple Wallet");
     const blob = await response.blob();
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -154,9 +177,37 @@ async function downloadWalletPass() {
     link.click();
     link.remove();
     setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-    walletMessage.textContent = "Pase listo. Ábrelo desde tu iPhone para agregarlo a Wallet.";
+    walletMessage.textContent = "Pase listo. Ábrelo desde tu iPhone para agregarlo a Apple Wallet.";
   } catch (error) {
-    walletMessage.textContent = error.message || "No se pudo crear el pase.";
+    walletMessage.textContent = error.message || "No se pudo crear el pase de Apple Wallet.";
+  } finally {
+    walletButton.disabled = false;
+  }
+}
+
+async function addGoogleWalletPass() {
+  const profile = walletProfile();
+  const walletMessage = document.querySelector("#walletMessage");
+  const walletButton = document.querySelector("#googleWalletButton");
+  const apiUrl = walletEndpoint("googleWalletApiUrl");
+  if (!profile || !apiUrl) {
+    walletMessage.textContent = "El enlace de Google Wallet aún no está configurado.";
+    return;
+  }
+  walletButton.disabled = true;
+  walletMessage.textContent = "Preparando tu pase de Google Wallet…";
+  try {
+    const response = await fetch(`${apiUrl}/wallet/save`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ memberId: profile.memberId, name: profile.name, email: profile.email || "demo@kooben.local", points: 120, plan: "Consentido Kóoben", status: "Activo" })
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.saveUrl) throw new Error(payload.error || "No se pudo generar el pase de Google Wallet");
+    window.open(payload.saveUrl, "_blank", "noopener,noreferrer");
+    walletMessage.textContent = "Pase listo. Se abrió la ventana para guardarlo en Google Wallet.";
+  } catch (error) {
+    walletMessage.textContent = error.message || "No se pudo crear el pase de Google Wallet.";
   } finally {
     walletButton.disabled = false;
   }
@@ -187,7 +238,8 @@ document.querySelector("#logoutButton").addEventListener("click", () => {
   renderMember();
 });
 
-document.querySelector("#walletButton").addEventListener("click", downloadWalletPass);
+document.querySelector("#googleWalletButton").addEventListener("click", addGoogleWalletPass);
+document.querySelector("#appleWalletButton").addEventListener("click", downloadAppleWalletPass);
 
 document.querySelector("#newsletterForm").addEventListener("submit", (event) => {
   event.preventDefault();
@@ -201,6 +253,7 @@ document.querySelector("#newsletterForm").addEventListener("submit", (event) => 
 updateBranchUI();
 setMenuCategory("especialidades");
 renderMember();
+updateWalletState();
 if (!validScreens.includes(location.hash.slice(1))) history.replaceState(null, "", "#inicio");
 showScreen(location.hash.slice(1), false, false);
 addEventListener("hashchange", () => showScreen(location.hash.slice(1), false));

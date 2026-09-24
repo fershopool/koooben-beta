@@ -6,17 +6,19 @@
   <meta name="theme-color" content="#191714">
   <title>Kóoben Admin · Demo</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="overrides.css">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
     <header class="admin-header">
-      <a class="brand admin-brand" href="index.html"><img class="admin-brand-logo" src="https://koobenpizza.my.canva.site/_assets/media/191b772e2dce9162779902b6f1ac02f1.png" alt="Kóoben"><span>Kóoben<small>admin demo local</small></span></a>
+      <a class="brand admin-brand" href="index.html"><img class="admin-brand-logo" src="https://koobenpizza.my.canva.site/_assets/media/191b772e2dce9162779902b6f1ac02f1.png" alt="Kóoben"><span class="brand-copy"><strong>Kóoben</strong><small>admin demo local</small></span></a>
       <a href="index.html" class="text-link light">Ver app ↗</a>
     </header>
     <div class="demo-banner"><strong>Modo demostración</strong><span>Datos simulados y guardados localmente. Sin conexión a ventas ni usuarios reales.</span></div>
     <nav class="admin-tabs" aria-label="Secciones de administración" role="tablist">
       <button class="active" id="tabEstadisticas" data-admin-go="estadisticas" role="tab" aria-controls="panelEstadisticas" aria-selected="true">Estadísticas</button>
       <button id="tabCrear" data-admin-go="crear" role="tab" aria-controls="panelCrear" aria-selected="false" tabindex="-1">Creación de usuario</button>
+      <button id="tabQr" data-admin-go="qr" role="tab" aria-controls="panelQr" aria-selected="false" tabindex="-1">Leer QR</button>
     </nav>
     <main>
       <section class="admin-screen active" id="panelEstadisticas" data-admin-screen="estadisticas" role="tabpanel" aria-labelledby="tabEstadisticas">
@@ -29,6 +31,15 @@
         <div class="admin-title"><div><p class="eyebrow">Alta local</p><h1>Creación de usuario</h1></div></div>
         <div class="create-user-layout"><article class="create-user-visual"><img src="https://koobenpizza.my.canva.site/_assets/media/191b772e2dce9162779902b6f1ac02f1.png" alt="Logo Kóoben"><strong>Nuevo Consentido</strong><p>Registra un perfil demo para probar el flujo de beneficios.</p></article><form id="registerUserForm" class="scan-form"><p class="eyebrow">Registro demo local</p><h2>Crear usuario</h2><p>Los datos se guardan solo en este navegador.</p><label>Nombre completo<input id="newUserName" required maxlength="60" placeholder="Ej. Abril Ramírez"></label><label>Correo electrónico<input id="newUserEmail" type="email" required maxlength="80" placeholder="nombre@ejemplo.com"></label><label>Sucursal<select id="newUserBranch"><option>UPIICSA Sociales</option><option>UPIICSA Graduados</option></select></label><button class="button button-accent" type="submit">Crear usuario</button></form></div>
         <article class="scan-result hidden" id="createUserResult" aria-live="polite"><div class="avatar" id="createdUserInitial">A</div><div><small>USUARIO CREADO · DEMO LOCAL</small><h2 id="createdUserName">Usuario demo</h2><p id="createdUserDetails">120 puntos demo · UPIICSA Sociales</p></div><span class="user-folio" id="createdUserFolio">KOO-0001</span></article>
+      </section>
+
+      <section class="admin-screen" id="panelQr" data-admin-screen="qr" role="tabpanel" aria-labelledby="tabQr" hidden>
+        <div class="admin-title"><div><p class="eyebrow">Validación demo</p><h1>Leer QR</h1></div></div>
+        <div class="scanner-layout">
+          <div class="scanner-placeholder" id="qrScannerPreview"><div class="scan-corners"><span>⌗</span></div><strong>Escanea el pase de un Consentido</strong><p id="qrCameraStatus">Activa la cámara para leer un código QR o captura el folio manualmente.</p><video id="qrVideo" class="qr-video hidden" autoplay playsinline muted></video></div>
+          <form id="scanForm" class="scan-form"><p class="eyebrow">Lector QR · demo local</p><h2>Consultar pase</h2><p>La lectura solo simula la validación y no consulta datos reales.</p><button class="button button-accent" id="startQrButton" type="button">Activar cámara</button><label>Folio del Consentido<input id="manualQrCode" maxlength="30" placeholder="Ej. KOO-0001" autocomplete="off"></label><button class="button button-dark" type="submit">Leer folio</button><p class="save-message" id="scanMessage" role="status"></p></form>
+        </div>
+        <article class="scan-result hidden" id="scanResult" aria-live="polite"><div class="avatar" id="scanInitial">K</div><div><small>LECTURA CONFIRMADA · DEMO LOCAL</small><h2 id="scanName">Consentido demo</h2><p id="scanDetails">120 puntos demo · UPIICSA Sociales</p></div><div class="demo-points"><strong id="scanPoints">120</strong><span>puntos</span></div></article>
       </section>
     </main>
   </div>

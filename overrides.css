@@ -1,0 +1,20 @@
+html,body{overflow-x:hidden}
+.wallet-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+.wallet-actions .button{width:100%;margin:0}
+.admin-brand{padding:.45rem .8rem;border:1px solid rgba(203,215,123,.35);border-radius:16px;background:linear-gradient(135deg,#302d1e,#211f1b);box-shadow:0 10px 24px rgba(0,0,0,.2)}
+.admin-brand .brand-copy{color:#fff}
+.admin-brand .brand-copy small{color:var(--lime)}
+.scanner-placeholder{position:relative}
+.scanner-placeholder.is-live{display:block;min-height:430px;padding:0}
+.scanner-placeholder.is-live>:not(.qr-video){display:none}
+.qr-video{width:100%;height:100%;min-height:330px;border-radius:22px;object-fit:cover;background:#000}
+[data-screen="consentidos"] .page-heading{display:flex;flex-direction:column;align-items:center;text-align:center}
+[data-screen="consentidos"] #loggedOutPanel,[data-screen="consentidos"] .member-card,[data-screen="consentidos"] .profile-form,[data-screen="consentidos"] .wallet-card{width:min(100%,530px);margin-left:auto;margin-right:auto}
+[data-screen="consentidos"] #loggedInPanel{text-align:center}
+[data-screen="consentidos"] .profile-form{text-align:left}
+[data-screen="consentidos"] .wallet-card{text-align:center}
+@media(max-width:820px){
+  .bottom-nav{width:100vw;max-width:none;left:0;right:0;transform:none;grid-template-columns:repeat(4,minmax(0,1fr));overflow:hidden}
+  .bottom-nav button{min-width:0;width:100%;overflow:hidden}
+  .wallet-actions{grid-template-columns:1fr}
+}
