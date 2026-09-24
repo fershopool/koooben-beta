@@ -14,7 +14,12 @@ html,body{overflow-x:hidden}
 [data-screen="consentidos"] .profile-form{text-align:left}
 [data-screen="consentidos"] .wallet-card{text-align:center}
 @media(max-width:820px){
-  .bottom-nav{width:100vw;max-width:none;left:0;right:0;transform:none;grid-template-columns:repeat(4,minmax(0,1fr));overflow:hidden}
+  [data-screen="horno"].active{display:flex!important;flex-direction:column}
+  [data-screen="horno"].active .page-heading{order:0}
+  [data-screen="horno"].active .available-now{order:1;margin-top:1.25rem}
+  [data-screen="horno"].active .stream-frame{order:2;margin-top:1rem}
+  [data-screen="horno"].active .stream-footer{order:3}
+  .bottom-nav{position:fixed!important;right:0!important;bottom:0!important;left:0!important;width:100vw!important;max-width:none!important;transform:none!important;grid-template-columns:repeat(4,minmax(0,1fr));overflow:hidden}
   .bottom-nav button{min-width:0;width:100%;overflow:hidden}
   .wallet-actions{grid-template-columns:1fr}
 }
