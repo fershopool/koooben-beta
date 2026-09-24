@@ -38,6 +38,7 @@ function stopQrScanner() {
   if (qrStream) qrStream.getTracks().forEach((track) => track.stop());
   qrStream = null;
   const video = document.querySelector("#qrVideo");
+  document.querySelector("#qrScannerPreview")?.classList.remove("is-live");
   if (video) {
     video.srcObject = null;
     video.classList.add("hidden");
@@ -86,6 +87,7 @@ async function startQrScanner() {
     const video = document.querySelector("#qrVideo");
     video.srcObject = qrStream;
     video.classList.remove("hidden");
+    document.querySelector("#qrScannerPreview")?.classList.add("is-live");
     status.textContent = "Apunta la cámara al QR del pase.";
     qrFrame = requestAnimationFrame(scanQrFrame);
   } catch {
