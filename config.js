@@ -8,12 +8,12 @@ window.KOOOBEN_CONFIG = {
   branches: {
     "UPIICSA Sociales": {
       rappiUrl: "https://www.rappi.com.mx/restaurantes/1930459302-kooben-pizzas",
-      streamUrl: "https://www.youtube.com/embed/PC8nOb8cTNg?rel=0&modestbranding=1",
+      streamUrl: "https://www.youtube.com/watch?v=PC8nOb8cTNg",
       availableNow: ["Pizza Napolitana", "Peppelove", "Hawaiana Tropical"]
     },
     "UPIICSA Graduados": {
       rappiUrl: "https://www.rappi.com.mx/restaurantes/1930459302-kooben-pizzas",
-      streamUrl: "https://www.youtube.com/embed/PC8nOb8cTNg?rel=0&modestbranding=1",
+      streamUrl: "https://www.youtube.com/watch?v=PC8nOb8cTNg",
       availableNow: ["Pepperoni", "Boneless BBQ", "Tres Quesos"]
     }
   }

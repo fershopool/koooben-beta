@@ -73,6 +73,16 @@ function setMenuCategory(category) {
   });
 }
 
+function youtubeVideoId(url) {
+  const value = String(url || "");
+  return value.match(/[?&]v=([^&]+)/)?.[1] || value.match(/embed\/([^?&]+)/)?.[1] || "";
+}
+
+function youtubeEmbedUrl(url) {
+  const id = youtubeVideoId(url);
+  return id ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1` : url;
+}
+
 function renderStream() {
   const frame = document.querySelector("#streamFrame");
   const sourceLink = document.querySelector("#streamSourceLink");
@@ -84,14 +94,14 @@ function renderStream() {
     return;
   }
   const iframe = document.createElement("iframe");
-  iframe.src = streamUrl;
+  iframe.src = youtubeEmbedUrl(streamUrl);
   iframe.title = `Transmisión en vivo de Kóoben · ${branch}`;
   iframe.loading = "lazy";
   iframe.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media";
   iframe.allowFullscreen = true;
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
   frame.append(iframe);
-  sourceLink.href = streamUrl.replace("/embed/", "/watch?v=").split("?")[0] + "?v=" + (streamUrl.match(/embed\/([^?]+)/)?.[1] || "PC8nOb8cTNg");
+  sourceLink.href = youtubeVideoId(streamUrl) ? `https://www.youtube.com/watch?v=${youtubeVideoId(streamUrl)}` : streamUrl;
   sourceLink.classList.remove("hidden");
 }
 
