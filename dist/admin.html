@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#191714">
+  <title>Koooben Admin · Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <header class="admin-header">
+      <a class="brand admin-brand" href="index.html"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Koooben<small>admin demo local</small></span></a>
+      <a href="index.html" class="text-link light">Ver app ↗</a>
+    </header>
+    <div class="demo-banner"><strong>Modo demostración</strong><span>Datos simulados y guardados localmente. Sin conexión a ventas ni usuarios reales.</span></div>
+    <nav class="admin-tabs" aria-label="Secciones de administración" role="tablist">
+      <button class="active" id="tabEstadisticas" data-admin-go="estadisticas" role="tab" aria-controls="panelEstadisticas" aria-selected="true">Estadísticas</button>
+      <button id="tabEscanear" data-admin-go="escanear" role="tab" aria-controls="panelEscanear" aria-selected="false" tabindex="-1">Escanear usuario</button>
+    </nav>
+    <main>
+      <section class="admin-screen active" id="panelEstadisticas" data-admin-screen="estadisticas" role="tabpanel" aria-labelledby="tabEstadisticas">
+        <div class="admin-title"><div><p class="eyebrow">Resumen demo</p><h1>Estadísticas</h1></div><label>Sucursal<select id="adminBranch"><option>UPIICSA Sociales</option><option>UPIICSA Graduados</option></select></label></div>
+        <div class="metric-grid">
+          <article><small>VISITAS SIMULADAS</small><strong id="metricVisits">48</strong><span>esta semana demo</span></article>
+          <article><small>PUNTOS DEMO</small><strong id="metricPoints">5,760</strong><span>emitidos localmente</span></article>
+          <article><small>CANJES SIMULADOS</small><strong id="metricRedemptions">7</strong><span>sin valor real</span></article>
+        </div>
+        <article class="chart-card">
+          <div><p class="eyebrow">Ejemplo de gráfica</p><h2>Visitas por día</h2></div>
+          <div class="bar-chart" aria-label="Ejemplo fijo no asociado al selector: lunes 4, martes 7, miércoles 5, jueves 9, viernes 13, sábado 10 visitas simuladas">
+            <span style="--value:31%"><i>4</i><small>L</small></span><span style="--value:54%"><i>7</i><small>M</small></span><span style="--value:38%"><i>5</i><small>M</small></span><span style="--value:69%"><i>9</i><small>J</small></span><span style="--value:100%"><i>13</i><small>V</small></span><span style="--value:77%"><i>10</i><small>S</small></span>
+          </div>
+          <small>Ejemplo fijo de 48 visitas simuladas para evaluar el diseño. No cambia con el selector de sucursal ni proviene de transacciones.</small>
+        </article>
+      </section>
+
+      <section class="admin-screen" id="panelEscanear" data-admin-screen="escanear" role="tabpanel" aria-labelledby="tabEscanear" hidden>
+        <div class="admin-title"><div><p class="eyebrow">Herramienta demo</p><h1>Escanear usuario</h1></div></div>
+        <div class="scanner-layout">
+          <article class="scanner-placeholder"><div class="scan-corners"><span>◉</span></div><strong>Cámara no habilitada</strong><p>Esta beta no accede a la cámara ni procesa códigos QR reales.</p></article>
+          <form id="scanDemoForm" class="scan-form">
+            <p class="eyebrow">Prueba manual local</p><h2>Simular una lectura</h2><p>Escribe un nombre para revisar el flujo visual. No busca ni modifica usuarios reales.</p>
+            <label>Nombre de demostración<input id="scanName" required maxlength="40" placeholder="Ej. Cliente demo"></label>
+            <button class="button button-accent" type="submit">Mostrar ficha demo</button>
+          </form>
+        </div>
+        <article class="scan-result hidden" id="scanResult" aria-live="polite"><div class="avatar" id="scanInitial">C</div><div><small>RESULTADO LOCAL SIMULADO</small><h2 id="scanResultName">Cliente demo</h2><p>120 puntos demo · QR no verificado</p></div><button class="button disabled" aria-disabled="true">Canje no disponible</button></article>
+      </section>
+    </main>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html>
