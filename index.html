@@ -97,8 +97,8 @@
           <form id="verificationForm" class="verification-card" novalidate>
             <p class="eyebrow">Estado del identificador</p>
             <label for="verificationToken">Token Tlatolli</label>
-            <div class="verification-input-row"><input id="verificationToken" name="token" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="200" placeholder="Pega aquí tu token" required><button class="button button-accent" id="verificationSubmit" type="submit">Verificar <span aria-hidden="true">↗</span></button></div>
-            <p class="verification-hint">Usa el token completo del enlace o código QR.</p>
+            <div class="verification-input-row"><input id="verificationToken" name="token" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="200" placeholder="Pega aquí tu token" aria-describedby="verificationHint verificationStatus" required><button class="button button-accent" id="verificationSubmit" type="submit">Verificar <span aria-hidden="true">↗</span></button></div>
+            <p class="verification-hint" id="verificationHint">Usa el token completo del enlace o código QR.</p>
             <p class="verification-status" id="verificationStatus" role="status" aria-live="polite"></p>
           </form>
           <aside class="verification-info"><p class="eyebrow">Consulta segura</p><h2>Estado público en segundos.</h2><p>Solo mostramos la información pública asociada al identificador.</p><ul><li>Válido: identificador vigente.</li><li>Revocado o expirado: ya no está vigente.</li><li>No encontrado: revisa el token.</li></ul></aside>
