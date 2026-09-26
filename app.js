@@ -7,7 +7,7 @@ const storage = {
   }
 };
 
-const validScreens = ["inicio", "menu", "paquetes", "promociones", "lanzamientos", "horno", "consentidos"];
+const validScreens = ["inicio", "menu", "paquetes", "promociones", "lanzamientos", "horno", "consentidos", "verificar"];
 const screens = [...document.querySelectorAll("[data-screen]")];
 const navButtons = [...document.querySelectorAll("[data-go]")];
 const branchDialog = document.querySelector("#branchDialog");
@@ -104,6 +104,121 @@ function renderStream() {
   sourceLink.href = youtubeVideoId(streamUrl) ? `https://www.youtube.com/watch?v=${youtubeVideoId(streamUrl)}` : streamUrl;
   sourceLink.classList.remove("hidden");
 }
+
+const verificationCopy = {
+  valid: { label: "Válido", title: "Identificador auténtico", message: "El identificador está vigente." },
+  revoked: { label: "Revocado", title: "Identificador revocado", message: "Este identificador fue revocado y ya no es válido." },
+  expired: { label: "Expirado", title: "Identificador expirado", message: "La fecha de vigencia de este identificador terminó." },
+  not_found: { label: "No encontrado", title: "Identificador no encontrado", message: "Revisa que el enlace o token estén completos." },
+  connection_error: { label: "Error de conexión", title: "No se pudo verificar", message: "No pudimos conectar con el servicio. Intenta nuevamente en unos minutos." }
+};
+
+const verificationForm = document.querySelector("#verificationForm");
+const verificationInput = document.querySelector("#verificationToken");
+const verificationSubmit = document.querySelector("#verificationSubmit");
+const verificationStatus = document.querySelector("#verificationStatus");
+const verificationResult = document.querySelector("#verificationResult");
+
+function verificationApiUrl() {
+  return (window.KOOOBEN_CONFIG?.tlatolliApiUrl || "").replace(/\/$/, "");
+}
+
+function formatVerificationDate(value) {
+  if (!value) return "No indicada";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? String(value) : new Intl.DateTimeFormat("es-MX", { dateStyle: "medium" }).format(date);
+}
+
+function appendVerificationDetail(list, label, value) {
+  const item = document.createElement("div");
+  const term = document.createElement("dt");
+  const description = document.createElement("dd");
+  term.textContent = label;
+  description.textContent = value || "No indicada";
+  item.append(term, description);
+  list.append(item);
+}
+
+function renderVerificationResult(status, tlatolli) {
+  const copy = verificationCopy[status] || verificationCopy.connection_error;
+  const resultClass = status === "connection_error" ? "connection-error" : status;
+  verificationResult.className = `verification-result ${resultClass}`;
+  verificationResult.replaceChildren();
+
+  const mark = document.createElement("span");
+  mark.className = "verification-result-mark";
+  mark.setAttribute("aria-hidden", "true");
+  mark.textContent = status === "valid" ? "✓" : "!";
+
+  const label = document.createElement("p");
+  label.className = "verification-result-label";
+  label.textContent = copy.label;
+
+  const title = document.createElement("h2");
+  title.textContent = copy.title;
+
+  const message = document.createElement("p");
+  message.className = "verification-result-message";
+  message.textContent = copy.message;
+
+  verificationResult.append(mark, label, title, message);
+
+  if (tlatolli) {
+    const details = document.createElement("dl");
+    details.className = "verification-details";
+    appendVerificationDetail(details, "Código", tlatolli.codigoTlatolli);
+    appendVerificationDetail(details, "Nombre", tlatolli.nombrePublico);
+    appendVerificationDetail(details, "Tipo", tlatolli.tipo);
+    appendVerificationDetail(details, "Emisión", formatVerificationDate(tlatolli.fechaEmision));
+    appendVerificationDetail(details, "Expiración", formatVerificationDate(tlatolli.fechaExpiracion));
+    verificationResult.append(details);
+  }
+
+  const disclaimer = document.createElement("p");
+  disclaimer.className = "verification-disclaimer";
+  disclaimer.textContent = "La información mostrada es pública y corresponde al estado actual del identificador.";
+  verificationResult.append(disclaimer);
+}
+
+verificationForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const token = verificationInput.value.trim();
+  if (!token) {
+    verificationStatus.textContent = "Escribe un token para iniciar la consulta.";
+    verificationInput.focus();
+    return;
+  }
+
+  const apiUrl = verificationApiUrl();
+  if (!apiUrl) {
+    renderVerificationResult("connection_error");
+    verificationStatus.textContent = "Error de conexión: servicio no configurado.";
+    return;
+  }
+
+  verificationSubmit.disabled = true;
+  verificationSubmit.setAttribute("aria-busy", "true");
+  verificationResult.classList.add("hidden");
+  verificationStatus.textContent = "Consultando el estado del identificador…";
+
+  try {
+    const response = await fetch(`${apiUrl}/api/public/verificar/${encodeURIComponent(token)}`, { headers: { Accept: "application/json" } });
+    const payload = await response.json().catch(() => null);
+    const status = ["valid", "revoked", "expired", "not_found"].includes(payload?.status)
+      ? payload.status
+      : response.status === 404 ? "not_found" : null;
+    if (!status) throw new Error("Verification request failed");
+    renderVerificationResult(status, payload.tlatolli);
+    verificationStatus.textContent = `Consulta completada: ${verificationCopy[status].label}.`;
+  } catch {
+    renderVerificationResult("connection_error");
+    verificationStatus.textContent = "Error de conexión. Intenta nuevamente en unos minutos.";
+  } finally {
+    verificationResult.classList.remove("hidden");
+    verificationSubmit.disabled = false;
+    verificationSubmit.removeAttribute("aria-busy");
+  }
+});
 
 navButtons.forEach((button) => button.addEventListener("click", () => showScreen(button.dataset.go)));
 document.querySelectorAll("[data-menu-category]").forEach((button) => button.addEventListener("click", () => {

@@ -26,6 +26,7 @@
         <button data-go="lanzamientos" type="button">Lanzamientos</button>
         <button data-go="horno" type="button">En vivo</button>
         <button data-go="consentidos" type="button">Consentidos</button>
+        <button data-go="verificar" type="button">Verificar</button>
       </nav>
       <div class="topbar-actions">
         <button class="branch-pill" id="branchButton" type="button" aria-haspopup="dialog"><span aria-hidden="true">⌖</span><span id="branchShort">UPIICSA Sociales</span></button>
@@ -40,7 +41,7 @@
             <p class="eyebrow">Kóoben · temporada 2026</p>
             <h1 id="homeTitle">Amor a primera <em>rebanada.</em></h1>
             <p class="hero-lede">Nuevas especialidades para compartir, descubrir y volver por otra. Elige tu sucursal para comenzar.</p>
-            <div class="hero-actions"><button class="button button-dark" data-go="menu" type="button">Conoce el menú <span>↗</span></button><button class="text-link" data-go="horno" type="button">Ver señal en vivo <span>↗</span></button></div>
+            <div class="hero-actions"><button class="button button-dark" data-go="menu" type="button">Conoce el menú <span>↗</span></button><button class="text-link" data-go="horno" type="button">Ver señal en vivo <span>↗</span></button><button class="text-link" data-go="verificar" type="button">Verifica tu Tlatolli <span>↗</span></button></div>
             <div class="hero-meta" aria-label="Información de temporada"><span><i></i> Especialidades de febrero</span><span>UPIICSA · CDMX</span></div>
           </div>
           <div class="hero-visual"><span class="hero-sticker">Especialidades<br>de febrero</span><div class="hero-circle" aria-hidden="true"></div><img src="https://koobenpizza.my.canva.site/_assets/media/b50650ba9392f00afc5e0bb7ecba0ad6.png" alt="Pizza en forma de corazón con pepperoni de Kóoben" loading="eager"><span class="hero-caption">hecho para compartir</span></div>
@@ -89,10 +90,25 @@
         <div id="loggedOutPanel" class="auth-card"><div class="loyalty-mark large">K</div><p class="eyebrow">Tu mesa, tu historia</p><h2>Entra al demo</h2><p>No se crea una cuenta real ni se envían datos.</p><form id="loginForm"><label>Tu nombre<input id="loginName" name="name" autocomplete="name" required maxlength="40" placeholder="Ej. Abril"></label><button class="button button-dark" type="submit">Iniciar sesión local</button></form></div>
         <div id="loggedInPanel" class="hidden"><article class="member-card"><div class="member-top"><span>CONSENTIDO · DEMO</span><span>LOCAL</span></div><p>Hola, <strong id="memberName">—</strong></p><div class="points"><strong id="pointsValue">120</strong><span>puntos demo</span></div><div class="fake-qr" aria-label="Marcador visual. Código QR no activo"><span>QR</span></div><small>QR NO ACTIVO · SOLO DEMOSTRACIÓN</small></article><form id="profileForm" class="profile-form"><h2>Tu perfil local</h2><label>Nombre<input id="profileName" required maxlength="40"></label><label>Correo opcional<input id="profileEmail" type="email" autocomplete="email" maxlength="80" placeholder="nombre@ejemplo.com"></label><button class="button button-dark" type="submit">Guardar perfil</button><p class="save-message" id="saveMessage" role="status"></p></form><div class="wallet-card"><p class="eyebrow">Pase digital</p><h2>Lleva tus beneficios contigo</h2><p>Agrega tu pase de Consentidos a Google Wallet o Apple Wallet.</p><div class="wallet-actions"><button class="button button-accent" id="googleWalletButton" type="button">Agregar a Google Wallet</button><button class="button button-dark" id="appleWalletButton" type="button">Agregar a Apple Wallet</button></div><p class="save-message" id="walletMessage" role="status"></p></div><button class="text-link danger" id="logoutButton" type="button">Cerrar sesión local</button></div>
       </section>
+
+      <section class="screen verification-screen" data-screen="verificar" aria-labelledby="verificationTitle">
+        <div class="page-heading verification-heading"><div><p class="eyebrow">Tlatolli · consulta pública</p><h1 id="verificationTitle">Verifica tu identificador.</h1><p>Consulta su estado con el token público. No necesitas una clave.</p></div><span class="verification-badge">Consulta pública</span></div>
+        <div class="verification-layout">
+          <form id="verificationForm" class="verification-card" novalidate>
+            <p class="eyebrow">Estado del identificador</p>
+            <label for="verificationToken">Token Tlatolli</label>
+            <div class="verification-input-row"><input id="verificationToken" name="token" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="200" placeholder="Pega aquí tu token" required><button class="button button-accent" id="verificationSubmit" type="submit">Verificar <span aria-hidden="true">↗</span></button></div>
+            <p class="verification-hint">Usa el token completo del enlace o código QR.</p>
+            <p class="verification-status" id="verificationStatus" role="status" aria-live="polite"></p>
+          </form>
+          <aside class="verification-info"><p class="eyebrow">Consulta segura</p><h2>Estado público en segundos.</h2><p>Solo mostramos la información pública asociada al identificador.</p><ul><li>Válido: identificador vigente.</li><li>Revocado o expirado: ya no está vigente.</li><li>No encontrado: revisa el token.</li></ul></aside>
+        </div>
+        <article id="verificationResult" class="verification-result hidden" aria-live="polite" aria-atomic="true"></article>
+      </section>
     </main>
 
     <footer class="site-footer"><div class="newsletter-copy"><p class="eyebrow">Kóoben en tu bandeja</p><h2>Regístrate y sé el primero en conocer nuestras promociones y lanzamientos.</h2></div><form id="newsletterForm" class="newsletter-form"><label><span>Tu nombre</span><input id="newsletterName" name="name" required maxlength="40" placeholder="Tu nombre"></label><label><span>Email</span><input id="newsletterEmail" name="email" type="email" required maxlength="80" placeholder="nombre@ejemplo.com"></label><button class="button button-accent" type="submit">Quiero enterarme ↗</button><p id="newsletterMessage" role="status"></p></form><div class="footer-bottom"><span>© Kóoben · un gusto culposo</span><span>Hecho con corazón en CDMX</span><span>Términos · Privacidad</span></div></footer>
-    <nav class="bottom-nav" aria-label="Navegación móvil"><button class="active" data-go="inicio" type="button"><span>⌂</span>Inicio</button><button data-go="menu" type="button"><span>▤</span>Menú</button><button data-go="horno" type="button"><span>◉</span>En vivo</button><button data-go="consentidos" type="button"><span>♡</span>Consentidos</button></nav>
+    <nav class="bottom-nav" aria-label="Navegación móvil"><button class="active" data-go="inicio" type="button"><span>⌂</span>Inicio</button><button data-go="menu" type="button"><span>▤</span>Menú</button><button data-go="horno" type="button"><span>◉</span>En vivo</button><button data-go="verificar" type="button"><span>✓</span>Verificar</button><button data-go="consentidos" type="button"><span>♡</span>Consentidos</button></nav>
   </div>
 
   <dialog id="branchDialog"><form method="dialog" class="dialog-card"><div class="dialog-heading"><div><p class="eyebrow">Preferencia local</p><h2>Elige tu sucursal</h2></div><button value="cancel" aria-label="Cerrar">×</button></div><label class="branch-option"><input type="radio" name="branch" value="UPIICSA Sociales"><span><strong>UPIICSA Sociales</strong><small>Seleccionar sucursal</small></span></label><label class="branch-option"><input type="radio" name="branch" value="UPIICSA Graduados"><span><strong>UPIICSA Graduados</strong><small>Seleccionar sucursal</small></span></label><button class="button button-dark" id="saveBranch" value="default">Guardar sucursal</button></form></dialog>

@@ -5,6 +5,8 @@ window.KOOOBEN_CONFIG = {
   googleWalletApiUrl: "",
   // Compatibilidad con la configuración anterior de Apple Wallet.
   walletApiUrl: "",
+  // Endpoint público de verificación Tlatolli. No requiere clave.
+  tlatolliApiUrl: "https://turning-skins-mailed-foot.trycloudflare.com",
   branches: {
     "UPIICSA Sociales": {
       rappiUrl: "https://www.rappi.com.mx/restaurantes/1930459302-kooben-pizzas",
