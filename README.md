@@ -38,4 +38,12 @@ La pantalla Menú muestra deliberadamente un estado pendiente. Cuando exista inv
 
 ## Datos locales
 
-La sucursal elegida y el perfil demo de Consentidos se guardan en `localStorage` del navegador. El QR, los puntos, las métricas y el escaneo siguen siendo demostraciones. Para un pase real, `memberId`, puntos, estado y vigencia deben venir de tu base de datos, no del navegador.
+La sucursal elegida y el perfil demo de Consentidos se guardan en `localStorage` del navegador. El panel admin puede leer QR con la cámara del dispositivo: solicita permiso, usa el lector nativo cuando existe y usa `jsQR` como respaldo. La cámara requiere `https` o `localhost`; si el permiso se rechaza, usa el folio o enlace manual. La validación de puntos y estado real todavía debe venir de tu base de datos, no del navegador.
+
+## Clientes reales y Tlatolli
+
+Configura koobenApiUrl en config.js con la URL HTTPS de Identificador_tlatolli desplegada en Ollin.
+
+El panel admin envía nombre y celular a /api/admin/kooben/clients. El backend genera el identificador aleatorio, guarda el cliente en la base privada y devuelve solo el folio y la URL pública de verificación.
+
+La clave administrativa se escribe en el panel y no se guarda en config.js ni localStorage. En producción, limita el origen con KOOOBEN_ALLOWED_ORIGIN y usa HTTPS.

@@ -4,20 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#191714">
-  <title>Kóoben Admin · Demo</title>
+  <title>Kóoben Admin</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="overrides.css">
 </head>
 <body class="admin-body">
   <div class="admin-shell">
     <header class="admin-header">
-      <a class="brand admin-brand" href="index.html"><img class="admin-brand-logo" src="https://koobenpizza.my.canva.site/_assets/media/191b772e2dce9162779902b6f1ac02f1.png" alt="Kóoben"><span class="brand-copy"><strong>Kóoben</strong><small>admin demo local</small></span></a>
+      <a class="brand admin-brand" href="index.html"><img class="admin-brand-logo" src="https://koobenpizza.my.canva.site/_assets/media/191b772e2dce9162779902b6f1ac02f1.png" alt="Kóoben"><span class="brand-copy"><strong>Kóoben</strong><small>panel administrativo</small></span></a>
       <a href="index.html" class="text-link light">Ver app ↗</a>
     </header>
-    <div class="demo-banner"><strong>Modo demostración</strong><span>Datos simulados y guardados localmente. Sin conexión a ventas ni usuarios reales.</span></div>
+    <div class="demo-banner"><strong>Panel administrativo</strong><span>Las altas de clientes se guardan en la base externa de Tlatolli.</span></div>
+    <section class="scan-form admin-auth-panel" id="adminAuthPanel">
+      <form id="adminLoginForm">
+        <p class="eyebrow">Acceso seguro</p>
+        <h2>Iniciar sesión</h2>
+        <p>La contraseña nunca se guarda en este navegador.</p>
+        <label>Correo administrativo<input id="adminEmail" type="email" required autocomplete="username" placeholder="admin@kooben.mx"></label>
+        <label>Contraseña<input id="adminPassword" type="password" required autocomplete="current-password" placeholder="Contraseña"></label>
+        <button class="button button-accent" type="submit">Entrar</button>
+        <p class="save-message" id="adminAuthMessage" role="status"></p>
+      </form>
+      <button class="button button-dark hidden" id="adminLogoutButton" type="button">Cerrar sesión</button>
+    </section>
     <nav class="admin-tabs" aria-label="Secciones de administración" role="tablist">
       <button class="active" id="tabEstadisticas" data-admin-go="estadisticas" role="tab" aria-controls="panelEstadisticas" aria-selected="true">Estadísticas</button>
-      <button id="tabCrear" data-admin-go="crear" role="tab" aria-controls="panelCrear" aria-selected="false" tabindex="-1">Creación de usuario</button>
+      <button id="tabCrear" data-admin-go="crear" role="tab" aria-controls="panelCrear" aria-selected="false" tabindex="-1">Crear cliente</button>
       <button id="tabQr" data-admin-go="qr" role="tab" aria-controls="panelQr" aria-selected="false" tabindex="-1">Leer QR</button>
     </nav>
     <main>
@@ -28,21 +40,23 @@
       </section>
 
       <section class="admin-screen" id="panelCrear" data-admin-screen="crear" role="tabpanel" aria-labelledby="tabCrear" hidden>
-        <div class="admin-title"><div><p class="eyebrow">Alta local</p><h1>Creación de usuario</h1></div></div>
-        <div class="create-user-layout"><article class="create-user-visual"><img src="https://koobenpizza.my.canva.site/_assets/media/191b772e2dce9162779902b6f1ac02f1.png" alt="Logo Kóoben"><strong>Nuevo Consentido</strong><p>Registra un perfil demo para probar el flujo de beneficios.</p></article><form id="registerUserForm" class="scan-form"><p class="eyebrow">Registro demo local</p><h2>Crear usuario</h2><p>Los datos se guardan solo en este navegador.</p><label>Nombre completo<input id="newUserName" required maxlength="60" placeholder="Ej. Abril Ramírez"></label><label>Correo electrónico<input id="newUserEmail" type="email" required maxlength="80" placeholder="nombre@ejemplo.com"></label><label>Sucursal<select id="newUserBranch"><option>UPIICSA Sociales</option><option>UPIICSA Graduados</option></select></label><button class="button button-accent" type="submit">Crear usuario</button></form></div>
-        <article class="scan-result hidden" id="createUserResult" aria-live="polite"><div class="avatar" id="createdUserInitial">A</div><div><small>USUARIO CREADO · DEMO LOCAL</small><h2 id="createdUserName">Usuario demo</h2><p id="createdUserDetails">120 puntos demo · UPIICSA Sociales</p></div><span class="user-folio" id="createdUserFolio">KOO-0001</span></article>
+        <div class="admin-title"><div><p class="eyebrow">Alta externa</p><h1>Crear cliente</h1></div></div>
+        <div class="create-user-layout"><article class="create-user-visual"><img src="https://koobenpizza.my.canva.site/_assets/media/191b772e2dce9162779902b6f1ac02f1.png" alt="Logo Kóoben"><strong>Nuevo Consentido</strong><p>Registra nombre y celular. El backend crea y enlaza su identificador Tlatolli.</p></article><form id="registerUserForm" class="scan-form"><p class="eyebrow">Registro seguro</p><h2>Nuevo cliente</h2><p>La sesión administrativa protege esta acción.</p><label>Nombre completo<input id="newUserName" required maxlength="160" placeholder="Ej. Abril Ramírez"></label><label>Prefijo<select id="newUserCountry" required><option value="+52">México (+52)</option></select></label><label>Celular<input id="newUserPhone" type="tel" inputmode="numeric" required minlength="10" maxlength="10" pattern="[0-9]{10}" placeholder="5532805987" autocomplete="tel-national"></label><button class="button button-accent" type="submit">Crear cliente</button><p class="save-message" id="createUserMessage" role="status"></p></form></div>
+        <article class="scan-result hidden" id="createUserResult" aria-live="polite"><div class="avatar" id="createdUserInitial">A</div><div><small>CLIENTE CREADO · IDENTIFICADOR ENLAZADO</small><h2 id="createdUserName">Cliente</h2><p id="createdUserDetails">Celular</p><a class="text-link light" id="createdTlatolliLink" href="#" target="_blank" rel="noopener">Abrir verificación</a><p class="save-message" id="createdQrMessage">El QR permanece vigente hasta una confirmación de escaneo.</p></div><img class="client-qr hidden" id="createdTlatolliQr" alt="Código QR del cliente" width="180" height="180"><span class="user-folio" id="createdUserFolio">TLT-0000</span></article>
       </section>
 
       <section class="admin-screen" id="panelQr" data-admin-screen="qr" role="tabpanel" aria-labelledby="tabQr" hidden>
-        <div class="admin-title"><div><p class="eyebrow">Validación demo</p><h1>Leer QR</h1></div></div>
+        <div class="admin-title"><div><p class="eyebrow">Validación real</p><h1>Leer QR</h1></div></div>
         <div class="scanner-layout">
-          <div class="scanner-placeholder" id="qrScannerPreview"><div class="scan-corners"><span>⌗</span></div><strong>Escanea el pase de un Consentido</strong><p id="qrCameraStatus">Activa la cámara para leer un código QR o captura el folio manualmente.</p><video id="qrVideo" class="qr-video hidden" autoplay playsinline muted></video></div>
-          <form id="scanForm" class="scan-form"><p class="eyebrow">Lector QR · demo local</p><h2>Consultar pase</h2><p>La lectura solo simula la validación y no consulta datos reales.</p><button class="button button-accent" id="startQrButton" type="button">Activar cámara</button><label>Folio del Consentido<input id="manualQrCode" maxlength="30" placeholder="Ej. KOO-0001" autocomplete="off"></label><button class="button button-dark" type="submit">Leer folio</button><p class="save-message" id="scanMessage" role="status"></p></form>
+          <div class="scanner-placeholder" id="qrScannerPreview"><div class="scan-corners"><span>⌗</span></div><strong>Escanea el pase de un Consentido</strong><p id="qrCameraStatus">Activa la cámara para leer un código QR o captura el folio manualmente.</p><video id="qrVideo" class="qr-video hidden" autoplay playsinline muted></video><canvas id="qrCanvas" class="hidden" aria-hidden="true"></canvas></div>
+          <form id="scanForm" class="scan-form"><p class="eyebrow">Lector QR</p><h2>Consultar pase</h2><p>Solicitaremos permiso para usar la cámara del dispositivo.</p><button class="button button-accent" id="startQrButton" type="button">Solicitar permiso y activar cámara</button><label>Folio o enlace del Consentido<input id="manualQrCode" maxlength="500" placeholder="Ej. TLT-0001 o enlace de verificación" autocomplete="off"></label><button class="button button-dark" type="submit">Leer folio</button><p class="save-message" id="scanMessage" role="status"></p></form>
         </div>
-        <article class="scan-result hidden" id="scanResult" aria-live="polite"><div class="avatar" id="scanInitial">K</div><div><small>LECTURA CONFIRMADA · DEMO LOCAL</small><h2 id="scanName">Consentido demo</h2><p id="scanDetails">120 puntos demo · UPIICSA Sociales</p></div><div class="demo-points"><strong id="scanPoints">120</strong><span>puntos</span></div></article>
+        <article class="scan-result hidden" id="scanResult" aria-live="polite"><div class="avatar" id="scanInitial">K</div><div><small>CLIENTE ENCONTRADO</small><h2 id="scanName">Cliente</h2><p id="scanDetails">Celular · TLT-0000</p><a class="button button-dark hidden" id="scanOpenLink" href="#" target="_blank" rel="noopener">Abrir nuevo QR</a><img class="client-qr hidden" id="scanQr" alt="Nuevo código QR del cliente" width="180" height="180"></div><div class="demo-points"><strong id="scanPoints">Pendiente</strong><span>estado</span></div><div class="scan-confirmation hidden" id="scanConfirmation"><p>Confirma para invalidar el QR actual y generar uno nuevo.</p><button class="button button-accent" id="confirmScanButton" type="button">Confirmar escaneo y generar QR</button></div></article>
       </section>
     </main>
   </div>
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

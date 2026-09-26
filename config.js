@@ -1,6 +1,8 @@
 // URLs configurables por sucursal. El video solicitado se muestra como señal externa.
+const koobenIsLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
 window.KOOOBEN_CONFIG = {
   // Endpoints públicos de tus APIs. Las claves privadas nunca van aquí.
+  koobenApiUrl: koobenIsLocal ? "http://localhost:3000" : "https://kooben.mx",
   appleWalletApiUrl: "",
   googleWalletApiUrl: "",
   // Compatibilidad con la configuración anterior de Apple Wallet.

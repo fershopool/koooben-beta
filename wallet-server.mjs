@@ -1,7 +1,7 @@
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { createServer } from "node:http";
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { chmod, mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { deflateSync } from "node:zlib";
@@ -17,6 +17,10 @@ const dataDir = process.env.WALLET_DATA_DIR || path.join(root, ".wallet-data");
 const dataFile = path.join(dataDir, "passes.json");
 const signingSecret = process.env.WALLET_SIGNING_SECRET || randomBytes(32).toString("hex");
 const adminToken = process.env.WALLET_ADMIN_TOKEN || "";
+const allowedOrigin = process.env.WALLET_ALLOWED_ORIGIN || "";
+const publicDownloadEnabled = process.env.WALLET_PUBLIC_DOWNLOAD_ENABLED === "true";
+const configuredMaxBodyBytes = Number(process.env.WALLET_MAX_BODY_BYTES || 16_384);
+const maxBodyBytes = Number.isFinite(configuredMaxBodyBytes) && configuredMaxBodyBytes > 0 ? configuredMaxBodyBytes : 16_384;
 let database = { passes: {}, registrations: {} };
 
 const icon = makePng(96, 96, 116, 73, 43);
@@ -63,6 +67,10 @@ function crc32(buffer) {
 async function loadDatabase() {
   if (!existsSync(dataFile)) return;
   try {
+    await chmod(dataDir, 0o700);
+    await chmod(dataFile, 0o600);
+  } catch {}
+  try {
     database = JSON.parse(await readFile(dataFile, "utf8"));
   } catch {
     console.warn(`No se pudo leer ${dataFile}; se iniciará una base vacía.`);
@@ -70,15 +78,20 @@ async function loadDatabase() {
 }
 
 async function saveDatabase() {
-  await mkdir(dataDir, { recursive: true });
+  await mkdir(dataDir, { recursive: true, mode: 0o700 });
+  try {
+    await chmod(dataDir, 0o700);
+  } catch {}
   await writeFile(dataFile, JSON.stringify(database, null, 2));
+  try {
+    await chmod(dataFile, 0o600);
+  } catch {}
 }
 
 function json(response, status, value) {
   response.writeHead(status, {
     "content-type": "application/json; charset=utf-8",
-    "cache-control": "no-store",
-    "access-control-allow-origin": "*"
+    "cache-control": "no-store"
   });
   response.end(JSON.stringify(value));
 }
@@ -88,7 +101,7 @@ function fail(response, status, message) {
 }
 
 function cors(response) {
-  response.setHeader("access-control-allow-origin", "*");
+  if (allowedOrigin) response.setHeader("access-control-allow-origin", allowedOrigin);
   response.setHeader("access-control-allow-methods", "GET,POST,PUT,DELETE,OPTIONS");
   response.setHeader("access-control-allow-headers", "Content-Type, Authorization, X-Wallet-Admin-Token");
 }
@@ -212,7 +225,11 @@ async function readJson(request) {
   let body = "";
   for await (const chunk of request) {
     body += chunk;
-    if (body.length > 100_000) throw new Error("Solicitud demasiado grande");
+    if (Buffer.byteLength(body) > maxBodyBytes) {
+      const error = new Error("Solicitud demasiado grande");
+      error.statusCode = 413;
+      throw error;
+    }
   }
   return JSON.parse(body || "{}");
 }
@@ -222,8 +239,7 @@ function sendPass(response, buffer, filename = "kooben-consentidos.pkpass") {
     "content-type": "application/vnd.apple.pkpass",
     "content-disposition": `attachment; filename="${filename}"`,
     "content-length": buffer.length,
-    "cache-control": "no-store",
-    "access-control-allow-origin": "*"
+    "cache-control": "no-store"
   });
   response.end(buffer);
 }
@@ -251,6 +267,7 @@ async function handleRequest(request, response) {
   const pathname = url.pathname;
   if (request.method === "GET" && pathname === "/healthz") return json(response, 200, { ok: true });
   if (request.method === "GET" && pathname === "/api/wallet/pass") {
+    if (!publicDownloadEnabled) return fail(response, 404, "Ruta no encontrada");
     try {
       const member = await createOrUpdateMember(url.searchParams.get("name"), url.searchParams.get("email"), url.searchParams.get("memberId"));
       return sendPass(response, await buildPass(member));
@@ -291,7 +308,7 @@ async function handleRequest(request, response) {
       await saveDatabase();
       return json(response, 200, { ok: true, serial: member.serial });
     } catch (error) {
-      return fail(response, 400, error.message);
+      return fail(response, error.statusCode || 400, error.message);
     }
   }
   const revoke = pathname.match(/^\/api\/wallet\/revoke\/([^/]+)$/);

@@ -30,7 +30,7 @@
       </nav>
       <div class="topbar-actions">
         <button class="branch-pill" id="branchButton" type="button" aria-haspopup="dialog"><span aria-hidden="true">⌖</span><span id="branchShort">UPIICSA Sociales</span></button>
-        <a class="admin-demo-link" href="admin.html">Admin demo</a>
+          <a class="admin-demo-link" href="admin.html">Panel admin</a>
       </div>
     </header>
 
@@ -52,7 +52,7 @@
           <article class="season-card"><div><div class="card-kicker">Nuevas especialidades</div><h2>Una rebanada<br>con historia.</h2><p>Descubre Napolitana y Peppelove en el menú de temporada.</p><button class="text-link" data-go="menu" type="button">Ver especialidades <span>↗</span></button></div><img src="https://koobenpizza.my.canva.site/_assets/media/9a39731e9c297db74167dc2361dc7925.png" alt="Rebanada de pizza con albóndigas" loading="lazy"></article>
         </div>
         <div class="marquee" aria-hidden="true"><div>CALIENTE · LOCAL · RECIÉN HECHO · CALIENTE · LOCAL · RECIÉN HECHO · </div></div>
-        <article class="loyalty-card"><div class="loyalty-mark">K</div><div><p class="eyebrow">Consentidos · demo local</p><h2>Cada visita cuenta.</h2><p>Guarda tu perfil en este dispositivo y descubre la experiencia de beneficios.</p></div><button class="circle-button" data-go="consentidos" type="button" aria-label="Ir a Consentidos">↗</button></article>
+        <article class="loyalty-card"><div class="loyalty-mark">K</div><div><p class="eyebrow">Consentidos</p><h2>Cada visita cuenta.</h2><p>Inicia sesión y consulta tu QR personal y tus beneficios.</p></div><button class="circle-button" data-go="consentidos" type="button" aria-label="Ir a Consentidos">↗</button></article>
       </section>
 
       <section class="screen" data-screen="menu" aria-labelledby="menuTitle">
@@ -80,15 +80,15 @@
 
       <section class="screen" data-screen="horno" aria-labelledby="ovenTitle">
         <div class="page-heading live-heading"><div><p class="eyebrow">Señal compartida por Kóoben</p><h1 id="ovenTitle">En vivo</h1><p id="ovenBranchCopy">UPIICSA Sociales</p></div><span class="live-badge"><i></i> LIVE</span></div>
-        <section class="available-now" aria-labelledby="availableTitle"><div><p class="eyebrow">Inventario demo</p><h2 id="availableTitle">Disponibles ahorita</h2><p id="availableBranch">UPIICSA Sociales</p></div><div class="available-list" id="availableList"></div></section>
+        <section class="available-now" aria-labelledby="availableTitle"><div><p class="eyebrow">Inventario</p><h2 id="availableTitle">Disponibles ahorita</h2><p id="availableBranch">UPIICSA Sociales</p></div><div class="available-list" id="availableList"></div></section>
         <div class="stream-frame" id="streamFrame"><div class="stream-empty" id="streamEmpty"><span class="stream-icon">◉</span><strong>Preparando la transmisión</strong><p>La señal aparecerá aquí cuando la sucursal esté lista.</p></div></div>
         <div class="stream-footer"><a class="button button-dark hidden" id="streamSourceLink" target="_blank" rel="noopener noreferrer">Abrir en YouTube ↗</a><p class="fine-print">Señal externa de YouTube · puede requerir activar el sonido.</p></div>
       </section>
 
       <section class="screen" data-screen="consentidos" aria-labelledby="loyaltyTitle">
-        <div class="page-heading"><p class="eyebrow">Programa de beneficios</p><h1 id="loyaltyTitle">Consentidos</h1><p>Perfil local demo y pase digital de membresía.</p></div>
-        <div id="loggedOutPanel" class="auth-card"><div class="loyalty-mark large">K</div><p class="eyebrow">Tu mesa, tu historia</p><h2>Entra al demo</h2><p>No se crea una cuenta real ni se envían datos.</p><form id="loginForm"><label>Tu nombre<input id="loginName" name="name" autocomplete="name" required maxlength="40" placeholder="Ej. Abril"></label><button class="button button-dark" type="submit">Iniciar sesión local</button></form></div>
-        <div id="loggedInPanel" class="hidden"><article class="member-card"><div class="member-top"><span>CONSENTIDO · DEMO</span><span>LOCAL</span></div><p>Hola, <strong id="memberName">—</strong></p><div class="points"><strong id="pointsValue">120</strong><span>puntos demo</span></div><div class="fake-qr" aria-label="Marcador visual. Código QR no activo"><span>QR</span></div><small>QR NO ACTIVO · SOLO DEMOSTRACIÓN</small></article><form id="profileForm" class="profile-form"><h2>Tu perfil local</h2><label>Nombre<input id="profileName" required maxlength="40"></label><label>Correo opcional<input id="profileEmail" type="email" autocomplete="email" maxlength="80" placeholder="nombre@ejemplo.com"></label><button class="button button-dark" type="submit">Guardar perfil</button><p class="save-message" id="saveMessage" role="status"></p></form><div class="wallet-card"><p class="eyebrow">Pase digital</p><h2>Lleva tus beneficios contigo</h2><p>Agrega tu pase de Consentidos a Google Wallet o Apple Wallet.</p><div class="wallet-actions"><button class="button button-accent" id="googleWalletButton" type="button">Agregar a Google Wallet</button><button class="button button-dark" id="appleWalletButton" type="button">Agregar a Apple Wallet</button></div><p class="save-message" id="walletMessage" role="status"></p></div><button class="text-link danger" id="logoutButton" type="button">Cerrar sesión local</button></div>
+        <div class="page-heading"><p class="eyebrow">Programa de beneficios</p><h1 id="loyaltyTitle">Consentidos</h1><p>Inicia sesión para consultar tu QR y tu pase digital.</p></div>
+        <div id="loggedOutPanel" class="auth-card"><div class="loyalty-mark large">K</div><p class="eyebrow">Tu mesa, tu historia</p><h2>Entra con tu celular</h2><p>Usaremos un código de un solo uso enviado por SMS o WhatsApp.</p><form id="loginForm"><label>Celular registrado<input id="loginPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" placeholder="55 1234 5678"></label><div id="otpStep" class="hidden"><label>Código de verificación<input id="loginOtp" name="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></label></div><button class="button button-dark" id="loginSubmit" type="submit">Enviar código</button><p class="save-message" id="loginMessage" role="status"></p></form></div>
+        <div id="loggedInPanel" class="hidden"><article class="member-card"><div class="member-top"><span>CONSENTIDO</span><span>CLIENTE</span></div><p>Hola, <strong id="memberName">—</strong></p><div class="client-qr"><img id="memberQr" alt="Código QR de tu cuenta" width="320" height="320"></div><small id="qrCodeLabel">QR personal</small></article><div class="profile-form"><h2>Tu cuenta</h2><p>Celular verificado: <strong id="memberPhone">—</strong></p><p class="save-message">Tu QR cambia cuando se vuelve a cargar para mantenerlo seguro.</p></div><div class="wallet-card"><p class="eyebrow">Pase digital</p><h2>Lleva tus beneficios contigo</h2><p>Agrega tu pase de Consentidos a Google Wallet o Apple Wallet.</p><div class="wallet-actions"><button class="button button-accent" id="googleWalletButton" type="button">Agregar a Google Wallet</button><button class="button button-dark" id="appleWalletButton" type="button">Agregar a Apple Wallet</button></div><p class="save-message" id="walletMessage" role="status"></p></div><button class="text-link danger" id="logoutButton" type="button">Cerrar sesión</button></div>
       </section>
 
       <section class="screen verification-screen" data-screen="verificar" aria-labelledby="verificationTitle">

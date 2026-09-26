@@ -23,3 +23,12 @@ html,body{overflow-x:hidden}
   .bottom-nav button{min-width:0;width:100%;overflow:hidden}
   .wallet-actions{grid-template-columns:1fr}
 }
+.admin-auth-panel{margin-top:24px;max-width:520px}
+.admin-auth-panel form{display:grid;gap:12px}
+.admin-auth-panel h2{margin:0;color:#fff}
+.admin-auth-panel p:not(.eyebrow){color:#aaa49b;line-height:1.5}
+.admin-auth-panel label{color:#d9d2ca}
+.admin-auth-panel .button{width:100%}
+.client-qr{align-self:center;border-radius:14px;background:#fff;padding:8px}
+.client-qr{width:min(100%,320px);margin:1.2rem auto .5rem}
+.client-qr img{display:block;width:100%;height:auto;border-radius:8px}

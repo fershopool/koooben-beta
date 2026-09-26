@@ -236,24 +236,39 @@ document.querySelector("#saveBranch").addEventListener("click", () => {
 
 const loggedOut = document.querySelector("#loggedOutPanel");
 const loggedIn = document.querySelector("#loggedInPanel");
+const loginForm = document.querySelector("#loginForm");
+const loginPhone = document.querySelector("#loginPhone");
+const loginOtp = document.querySelector("#loginOtp");
+const otpStep = document.querySelector("#otpStep");
+const loginSubmit = document.querySelector("#loginSubmit");
+const loginMessage = document.querySelector("#loginMessage");
+let memberProfile = null;
+let otpPhone = "";
 
-function ensureMemberId(profile) {
-  if (profile.memberId) return profile.memberId;
-  const memberId = `member-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-  profile.memberId = memberId;
-  storage.set("koooben.profile", profile);
-  return memberId;
+function apiEndpoint(path) {
+  const base = (window.KOOOBEN_CONFIG?.koobenApiUrl || location.origin).replace(/\/$/, "");
+  return `${base}${path}`;
+}
+
+async function apiRequest(path, options = {}) {
+  const response = await fetch(apiEndpoint(path), {
+    credentials: "include",
+    ...options,
+    headers: { "content-type": "application/json", ...(options.headers || {}) }
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || "No se pudo completar la solicitud.");
+  return payload;
 }
 
 function renderMember() {
-  const profile = storage.get("koooben.profile", null);
-  loggedOut.classList.toggle("hidden", Boolean(profile));
-  loggedIn.classList.toggle("hidden", !profile);
-  if (!profile) return;
-  ensureMemberId(profile);
-  document.querySelector("#memberName").textContent = profile.name;
-  document.querySelector("#profileName").value = profile.name;
-  document.querySelector("#profileEmail").value = profile.email || "";
+  loggedOut.classList.toggle("hidden", Boolean(memberProfile));
+  loggedIn.classList.toggle("hidden", !memberProfile);
+  if (!memberProfile) return;
+  document.querySelector("#memberName").textContent = memberProfile.nombre;
+  document.querySelector("#memberPhone").textContent = memberProfile.celular || "Verificado";
+  document.querySelector("#memberQr").src = memberProfile.qrDataUrl;
+  document.querySelector("#qrCodeLabel").textContent = `Código ${memberProfile.codigoTlatolli}`;
   updateWalletState();
 }
 
@@ -262,8 +277,7 @@ function walletEndpoint(name) {
 }
 
 function walletProfile() {
-  const profile = storage.get("koooben.profile", null);
-  return profile ? { ...profile, memberId: ensureMemberId(profile) } : null;
+  return memberProfile;
 }
 
 function updateWalletState() {
@@ -291,7 +305,7 @@ async function downloadAppleWalletPass() {
   walletButton.disabled = true;
   walletMessage.textContent = "Preparando tu pase de Apple Wallet…";
   try {
-    const query = new URLSearchParams({ name: profile.name, email: profile.email || "", memberId: profile.memberId });
+    const query = new URLSearchParams({ name: profile.nombre, email: "", memberId: profile.clientId });
     const response = await fetch(`${apiUrl}/api/wallet/pass?${query}`);
     if (!response.ok) throw new Error("No se pudo generar el pase de Apple Wallet");
     const blob = await response.blob();
@@ -325,7 +339,7 @@ async function addGoogleWalletPass() {
     const response = await fetch(`${apiUrl}/wallet/save`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ memberId: profile.memberId, name: profile.name, email: profile.email || "demo@kooben.local", points: 120, plan: "Consentido Kóoben", status: "Activo" })
+      body: JSON.stringify({ memberId: profile.clientId, name: profile.nombre, email: "", points: 0, plan: "Consentido Kóoben", status: "Activo" })
     });
     const payload = await response.json();
     if (!response.ok || !payload.saveUrl) throw new Error(payload.error || "No se pudo generar el pase de Google Wallet");
@@ -338,28 +352,51 @@ async function addGoogleWalletPass() {
   }
 }
 
-document.querySelector("#loginForm").addEventListener("submit", (event) => {
+loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const name = document.querySelector("#loginName").value.trim();
-  if (!name) return;
-  storage.set("koooben.profile", { name, email: "", memberId: `member-${Date.now()}-${Math.random().toString(36).slice(2, 10)}` });
-  renderMember();
+  const phone = loginPhone.value.trim();
+  if (!phone) return;
+  loginSubmit.disabled = true;
+  loginMessage.textContent = otpPhone ? "Verificando código…" : "Enviando código…";
+  try {
+    if (!otpPhone) {
+      await apiRequest("/api/kooben/auth/request-otp", {
+        method: "POST",
+        body: JSON.stringify({ phone })
+      });
+      otpPhone = phone;
+      loginPhone.readOnly = true;
+      otpStep.classList.remove("hidden");
+      loginOtp.focus();
+      loginSubmit.textContent = "Verificar código";
+      loginMessage.textContent = "Código enviado. Revisa tu celular.";
+      return;
+    }
+
+    const payload = await apiRequest("/api/kooben/auth/verify-otp", {
+      method: "POST",
+      body: JSON.stringify({ phone: otpPhone, token: loginOtp.value.trim() })
+    });
+    if (!payload.ok) throw new Error("No se pudo iniciar sesión.");
+    loginMessage.textContent = "Sesión iniciada. Cargando tu QR…";
+    memberProfile = await apiRequest("/api/kooben/me/qr");
+    renderMember();
+  } catch (error) {
+    loginMessage.textContent = error.message || "No se pudo iniciar sesión.";
+  } finally {
+    loginSubmit.disabled = false;
+  }
 });
 
-document.querySelector("#profileForm").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const name = document.querySelector("#profileName").value.trim();
-  const email = document.querySelector("#profileEmail").value.trim();
-  if (!name) return;
-  const profile = storage.get("koooben.profile", {});
-  storage.set("koooben.profile", { ...profile, name, email });
-  document.querySelector("#saveMessage").textContent = "Guardado en este dispositivo.";
-  renderMember();
-});
-
-document.querySelector("#logoutButton").addEventListener("click", () => {
-  localStorage.removeItem("koooben.profile");
-  document.querySelector("#loginForm").reset();
+document.querySelector("#logoutButton").addEventListener("click", async () => {
+  try { await apiRequest("/api/kooben/auth/logout", { method: "POST", body: "{}" }); } catch {}
+  memberProfile = null;
+  otpPhone = "";
+  loginForm.reset();
+  loginPhone.readOnly = false;
+  otpStep.classList.add("hidden");
+  loginSubmit.textContent = "Enviar código";
+  loginMessage.textContent = "";
   renderMember();
 });
 
@@ -379,6 +416,9 @@ updateBranchUI();
 setMenuCategory("especialidades");
 renderMember();
 updateWalletState();
+apiRequest("/api/kooben/me/qr")
+  .then((profile) => { memberProfile = profile; renderMember(); })
+  .catch(() => renderMember());
 if (!validScreens.includes(location.hash.slice(1))) history.replaceState(null, "", "#inicio");
 showScreen(location.hash.slice(1), false, false);
 addEventListener("hashchange", () => showScreen(location.hash.slice(1), false));
